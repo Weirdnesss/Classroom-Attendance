@@ -3,6 +3,8 @@
 @section('content')
 <div class="mb-6">
     <a href="{{ route('admin.sessions.index') }}" class="text-sm text-gray-500 hover:underline">← Back</a>
+    <a href="{{ route('admin.reports.session', $session) }}"
+        class="text-sm text-blue-500 hover:underline ml-4">View Report</a>
     <h1 class="text-xl font-semibold mt-1">
         {{ $session->classSchedule->subject->code }} — {{ $session->date->format('M d, Y') }}
     </h1>

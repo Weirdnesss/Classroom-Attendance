@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('middle_name')->nullable();
-            $table->string('rfid_tag')->unique()->nullable();
             $table->unsignedTinyInteger('year_level');
             $table->boolean('is_irregular')->default(false);
             $table->boolean('is_active')->default(true);

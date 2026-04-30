@@ -14,7 +14,8 @@ use Illuminate\Http\Request;
 class AttendanceScanController extends Controller
 {
     public function scan(Request $request)
-    {
+    {   
+        
         $request->validate([
             'rfid_tag'   => 'required|string',
             'device_uid' => 'required|string',
@@ -39,8 +40,25 @@ class AttendanceScanController extends Controller
         }
 
         $studentId = substr($rfid, 5); // everything after position 5
+        
+        // 3. Resolve active session for this device's room
+        $session = ClassSession::where('room_id', $device->room_id)
+        ->whereDate('date', now()->toDateString())
+        ->where('status', 'active')
+        ->first();
 
-        // 3. Resolve student
+        if (!$session) {
+        return response()->json(['error' => 'No active session for this device.'], 404);
+        }
+
+        // $debugSession = ClassSession::where('room_id', $device->room_id)->get();
+        // return response()->json([
+        //     'device_room_id'  => $device->room_id,
+        //     'today'           => now()->toDateString(),
+        //     'all_sessions'    => $debugSession,
+        // ]);
+
+        // 4. Resolve student
         $student = Student::where('student_id', $studentId)
             ->where('is_active', true)
             ->first();
@@ -49,7 +67,7 @@ class AttendanceScanController extends Controller
             return response()->json(['error' => 'Student not found: ' . $studentId], 404);
         }
 
-        // 4. Find the attendance log for this student
+        // 5. Find the attendance log for this student
         $log = AttendanceLog::where('class_session_id', $session->id)
             ->where('student_id', $student->id)
             ->first();
@@ -60,7 +78,7 @@ class AttendanceScanController extends Controller
 
         $now = Carbon::now();
 
-        // 5. Handle scan based on mode
+        // 6. Handle scan based on mode
         if ($session->scan_mode === 'in') {
             if ($log->time_in) {
                 return response()->json([
@@ -87,22 +105,38 @@ class AttendanceScanController extends Controller
 
         } else {
             // Scan out
-            if (!$log->time_in) {
-                return response()->json(['error' => 'Student has not scanned in yet.'], 400);
-            }
+            $time = $now->format('H:i:s');
 
+            $period = SessionPeriod::where('class_session_id', $session->id)
+                ->where('timeout_enabled', true)
+                ->where('time_out_start', '<=', $time)
+                ->where('time_out_end', '>=', $time)
+                ->first();
+        
+            if (!$period) {
+                return response()->json([
+                    'error' => 'No active scan-out window right now.'
+                ], 400);
+            }
+        
+            if (!$log->time_in) {
+                return response()->json([
+                    'error' => 'Student has not scanned in yet.'
+                ], 400);
+            }
+        
             if ($log->time_out) {
                 return response()->json([
                     'message' => 'Already scanned out.',
                     'student' => $student->full_name,
                 ]);
             }
-
+        
             $log->update([
                 'time_out'  => $now,
                 'device_id' => $device->id,
             ]);
-
+        
             return response()->json([
                 'message' => 'Scan out recorded.',
                 'student' => $student->full_name,
@@ -113,31 +147,25 @@ class AttendanceScanController extends Controller
 
     private function resolveStatus(ClassSession $session, Carbon $now): string
     {
-        // Get active period rules for this session
-        $period = SessionPeriod::where('class_session_id', $session->id)->first();
+        $time = $now->format('H:i:s');
+
+        // Find the matching period by current time window
+        $period = SessionPeriod::where('class_session_id', $session->id)
+            ->where('time_in_start', '<=', $time)
+            ->where('time_in_end', '>=', $time)
+            ->first();
 
         if (!$period) {
-            // No period rules — just mark present
+            return 'present'; // no matching period — default
+        }
+
+        if (!$period->late_enabled || !$period->late_start) {
             return 'present';
         }
 
-        $time = $now->format('H:i:s');
+        $lateStart = Carbon::parse($period->late_start);
+        $cutoff    = $lateStart->copy()->addMinutes($period->grace_minutes ?? 0);
 
-        // Within time_in window
-        if ($time >= $period->time_in_start && $time <= $period->time_in_end) {
-            // Check grace period
-            $lateStart = Carbon::parse($period->late_start);
-            $graceEnd  = $lateStart->copy()->addMinutes($period->grace_minutes);
-
-            if ($time <= $period->late_start) {
-                return 'present';
-            }
-
-            if ($period->late_enabled) {
-                return 'late';
-            }
-        }
-
-        return 'present';
+        return $now->greaterThan($cutoff) ? 'late' : 'present';
     }
 }

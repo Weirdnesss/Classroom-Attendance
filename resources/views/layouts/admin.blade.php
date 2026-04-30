@@ -15,6 +15,9 @@
         </div>
 
         <nav class="flex-1 px-4 py-4 space-y-1 text-sm">
+            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 mb-1">Overview</p>
+            <a href="{{ route('admin.dashboard') }}" class="block px-2 py-1.5 rounded hover:bg-gray-100">Dashboard</a>
+           
             <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 mb-1">Academic</p>
             <a href="{{ route('admin.academic-years.index') }}" class="block px-2 py-1.5 rounded hover:bg-gray-100">Academic Years</a>
             <a href="{{ route('admin.terms.index') }}" class="block px-2 py-1.5 rounded hover:bg-gray-100">Terms</a>
@@ -38,6 +41,9 @@
         
             <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 mt-4 mb-1">Sessions</p>
             <a href="{{ route('admin.sessions.index') }}" class="block px-2 py-1.5 rounded hover:bg-gray-100">Class Sessions</a>
+
+            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 mt-4 mb-1">Reports</p>
+            <a href="{{ route('admin.reports.index') }}" class="block px-2 py-1.5 rounded hover:bg-gray-100">Reports</a>
         </nav>
 
         <div class="px-4 py-4 border-t border-gray-200 text-sm">

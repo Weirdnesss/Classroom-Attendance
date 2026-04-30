@@ -11,15 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('students', function (Blueprint $table) {
-            $table->dropColumn('rfid_tag');
+        Schema::table('session_periods', function (Blueprint $table) {
+            $table->string('label')->nullable()->after('class_session_id');
         });
     }
-    
+
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::table('students', function (Blueprint $table) {
-            $table->string('rfid_tag')->unique()->nullable();
+        Schema::table('session_periods', function (Blueprint $table) {
+            $table->dropColumn('label');
         });
     }
 };

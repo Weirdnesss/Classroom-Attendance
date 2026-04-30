@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('session_periods', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('class_session_id')->constrained()->cascadeOnDelete();            $table->time('time_in_start');
+            $table->foreignId('class_session_id')->constrained()->cascadeOnDelete();            
+            $table->string('label')->nullable()->after('class_session_id');
+            $table->time('time_in_start');
             $table->time('time_in_end');
             $table->time('late_start');
             $table->time('time_out_start');

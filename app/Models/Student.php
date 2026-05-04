@@ -12,8 +12,8 @@ class Student extends Model
 {
     protected $fillable = [
         'user_id', 'program_id', 'student_id',
-        'first_name', 'last_name', 'middle_name',
-        'rfid_tag', 'year_level', 'is_irregular', 'is_active'
+        'first_name', 'last_name', 'middle_name', 
+        'year_level', 'is_irregular', 'is_active'
     ];
     
     protected $casts = [

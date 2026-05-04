@@ -55,14 +55,6 @@
             @error('department_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
         </div>
 
-        <div class="mb-6">
-            <label class="block text-sm font-medium mb-1">RFID Tag <span class="text-gray-400">(optional)</span></label>
-            <input type="text" name="rfid_tag" value="{{ old('rfid_tag') }}"
-                   placeholder="e.g. A1B2C3D4"
-                   class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400">
-            @error('rfid_tag') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-        </div>
-
         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Account</p>
 
         <div class="mb-4">

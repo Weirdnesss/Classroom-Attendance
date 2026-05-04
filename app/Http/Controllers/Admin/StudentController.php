@@ -33,9 +33,7 @@ class StudentController extends Controller
             'student_id'   => 'required|string|unique:students,student_id',
             'program_id'   => 'required|exists:programs,id',
             'year_level'   => 'required|integer|min:1|max:6',
-            'is_irregular' => 'boolean',
-            'email'        => 'nullable|email|unique:users,email',
-            'password'     => 'nullable|min:6|required_with:email',
+            'is_irregular' => 'boolean'
         ]);
 
         DB::transaction(function () use ($request) {
@@ -87,26 +85,9 @@ class StudentController extends Controller
             'year_level'   => 'required|integer|min:1|max:6',
             'is_irregular' => 'boolean',
             'is_active'    => 'boolean',
-            'email'        => 'nullable|email|unique:users,email,' . ($student->user_id ?? 'NULL'),
-            'password'     => 'nullable|min:6',
         ]);
 
         DB::transaction(function () use ($request, $student) {
-            if ($request->filled('email')) {
-                if ($student->user) {
-                    $userData = ['name' => $request->first_name . ' ' . $request->last_name, 'email' => $request->email];
-                    if ($request->filled('password')) $userData['password'] = Hash::make($request->password);
-                    $student->user->update($userData);
-                } else {
-                    $user = User::create([
-                        'name'     => $request->first_name . ' ' . $request->last_name,
-                        'email'    => $request->email,
-                        'password' => Hash::make($request->password ?? str()->random(12)),
-                        'role'     => 'student',
-                    ]);
-                    $student->user_id = $user->id;
-                }
-            }
 
             $student->update([
                 'program_id'   => $request->program_id,

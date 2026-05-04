@@ -17,7 +17,6 @@
                 <th class="text-left px-4 py-3 font-medium text-gray-600">Name</th>
                 <th class="text-left px-4 py-3 font-medium text-gray-600">Program</th>
                 <th class="text-left px-4 py-3 font-medium text-gray-600">Year</th>
-                <th class="text-left px-4 py-3 font-medium text-gray-600">RFID</th>
                 <th class="text-left px-4 py-3 font-medium text-gray-600">Type</th>
                 <th class="text-left px-4 py-3 font-medium text-gray-600">Status</th>
                 <th class="px-4 py-3"></th>
@@ -32,7 +31,6 @@
                     {{ $student->program->code ?? '—' }}
                 </td>
                 <td class="px-4 py-3 text-gray-500">Year {{ $student->year_level }}</td>
-                <td class="px-4 py-3 text-gray-500">{{ $student->rfid_tag ?? '—' }}</td>
                 <td class="px-4 py-3">
                     @if($student->is_irregular)
                         <span class="px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded-full text-xs">Irregular</span>

@@ -17,7 +17,6 @@
                 <th class="text-left px-4 py-3 font-medium text-gray-600">Name</th>
                 <th class="text-left px-4 py-3 font-medium text-gray-600">Department</th>
                 <th class="text-left px-4 py-3 font-medium text-gray-600">Email</th>
-                <th class="text-left px-4 py-3 font-medium text-gray-600">RFID</th>
                 <th class="text-left px-4 py-3 font-medium text-gray-600">Status</th>
                 <th class="px-4 py-3"></th>
             </tr>
@@ -29,7 +28,6 @@
                 <td class="px-4 py-3">{{ $teacher->full_name }}</td>
                 <td class="px-4 py-3 text-gray-500">{{ $teacher->department->code ?? '—' }}</td>
                 <td class="px-4 py-3 text-gray-500">{{ $teacher->user->email ?? '—' }}</td>
-                <td class="px-4 py-3 text-gray-500">{{ $teacher->rfid_tag ?? '—' }}</td>
                 <td class="px-4 py-3">
                     @if($teacher->is_active)
                         <span class="px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs">Active</span>

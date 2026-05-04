@@ -12,7 +12,7 @@ class Teacher extends Model
 {
     protected $fillable = [
         'user_id', 'department_id', 'employee_id',
-        'first_name', 'last_name', 'middle_name', 'rfid_tag', 'is_active'
+        'first_name', 'last_name', 'middle_name', 'is_active'
     ];
     
     protected $casts = ['is_active' => 'boolean'];

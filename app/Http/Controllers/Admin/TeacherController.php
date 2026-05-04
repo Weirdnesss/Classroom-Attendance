@@ -74,7 +74,6 @@ class TeacherController extends Controller
             'middle_name'   => 'nullable|string',
             'employee_id'   => 'required|string|unique:teachers,employee_id,' . $teacher->id,
             'department_id' => 'required|exists:departments,id',
-            'rfid_tag'      => 'nullable|string|unique:teachers,rfid_tag,' . $teacher->id,
             'email'         => 'required|email|unique:users,email,' . $teacher->user_id,
             'password'      => 'nullable|min:6',
             'is_active'     => 'boolean',
@@ -96,7 +95,6 @@ class TeacherController extends Controller
                 'first_name'    => $request->first_name,
                 'last_name'     => $request->last_name,
                 'middle_name'   => $request->middle_name,
-                'rfid_tag'      => $request->rfid_tag,
                 'is_active'     => $request->boolean('is_active'),
             ]);
         });

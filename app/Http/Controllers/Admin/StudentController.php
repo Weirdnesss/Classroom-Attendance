@@ -50,7 +50,6 @@ class StudentController extends Controller
             }
 
             Student::create([
-                'user_id'      => $userId,
                 'program_id'   => $request->program_id,
                 'student_id'   => $request->student_id,
                 'first_name'   => $request->first_name,

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('room_id')->constrained()->cascadeOnDelete();
             $table->foreignId('teacher_id')->constrained()->cascadeOnDelete();
             $table->foreignId('academic_term_id')->constrained()->cascadeOnDelete();
-            $table->date('date')->after('academic_term_id')->nullable();
+            $table->date('date')->nullable();
             $table->timestamp('started_at')->nullable();
             $table->timestamp('ended_at')->nullable();
             $table->enum('scan_mode', ['in', 'out'])->default('in');
